@@ -29,9 +29,10 @@ namespace SalesWebMvc
             services.AddControllersWithViews();
 
             services.AddDbContext<SalesWebMvcContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("SalesWebMvcContext")));
-        }
 
+                    options.UseMySql("server=localhost;userid=developer;password=2804;database=saleswebmvcappdb", new MySqlServerVersion(new Version(8, 0, 31)), options =>
+                        options.MigrationsAssembly("SalesWebMvc")));
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
