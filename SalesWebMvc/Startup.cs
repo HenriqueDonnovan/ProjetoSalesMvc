@@ -32,13 +32,16 @@ namespace SalesWebMvc
 
                     options.UseMySql("server=localhost;userid=developer;password=2804;database=saleswebmvcappdb", new MySqlServerVersion(new Version(8, 0, 31)), options =>
                         options.MigrationsAssembly("SalesWebMvc")));
+
+            services.AddScoped<SeedingService>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SeedingService seedingService)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                seedingService.Seed();
             }
             else
             {
