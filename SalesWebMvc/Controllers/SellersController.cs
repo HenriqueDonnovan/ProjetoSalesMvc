@@ -2,6 +2,7 @@
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
+using System.Collections.Generic;
 using System.Composition;
 
 namespace SalesWebMvc.Controllers
@@ -14,7 +15,7 @@ namespace SalesWebMvc.Controllers
         public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
             _sellerService = sellerService;
-            _departmentService = departmentService; 
+            _departmentService = departmentService;
         }
 
         public IActionResult Index()
@@ -40,13 +41,13 @@ namespace SalesWebMvc.Controllers
         }
         public IActionResult Delete(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             var obj = _sellerService.FindById(id.Value);
-            if(obj == null)
+            if (obj == null)
             {
                 return NotFound();
             }
@@ -63,17 +64,35 @@ namespace SalesWebMvc.Controllers
 
         public IActionResult Details(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
+            var obj = _sellerService.FindById(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var obj = _sellerService.FindById(id.Value);
             if(obj == null)
             {
                 return NotFound();
             }
 
-            return View(obj);
+            List<Department> departments = _departmentService.FindAll();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+            return View(viewModel);
         }
     }
 }
